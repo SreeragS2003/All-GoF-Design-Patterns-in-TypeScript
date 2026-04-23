@@ -1,0 +1,301 @@
+Design Patterns in Typescript:
+
+Folder - Documents/Design Patterns in TypeScript
+
+npm init -y
+npm install typescript ts-node --save-dev
+npx tsc --init
+
+To run a sample design pattern, navigate to the folder, then do npx tsx use_case.ts
+
+Creational Patterns:
+
+1. Singleton
+
+"real-world" use case for a Singleton: a centralized state that must be consistent across multiple independent parts of an application.
+
+In gaming, if every level or "mini-game" created its own Leaderboard instance, your scores would be fragmented. By using a Singleton, Game1, Game2, and Game3 all write to and read from the exact same point in memory.
+
+
+2. Factory
+
+In your Singleton example, you knew exactly what class you were dealing with (Leaderboard). But in many apps, you don't know which object you need until the program is actually running.
+
+The Problem: If you use new Dog() or new Cat() all over your code, your project becomes "tightly coupled." If you decide to add a Bird later, you have to find every single place you wrote new and change the logic.
+
+The Solution: You create a "Factory" that handles the creation logic for you. You just tell the factory, "Give me an animal," and it decides which one to build.
+
+3. Abstract Factory
+
+The Abstract Factory is often confused with the Factory Method, but there is a key difference: while the Factory Method creates one product, the Abstract Factory creates families of related products.
+
+Think of it as a "Factory of Factories."
+
+The Use Case: A Cross-Platform UI Toolkit
+Imagine you are building a strategy game that needs to run on Desktop (Windows) and Mobile (Android).
+
+On Windows, you need WindowsButtons and WindowsMenus.
+
+On Android, you need AndroidButtons and AndroidMenus.
+
+You must ensure that a Windows Button never ends up inside an Android Menu. The Abstract Factory enforces this "Family" consistency.
+
+
+4. Builder
+
+Imagine you are coding a Pizza ordering system. A Pizza can have many optional parts:
+
+Crust type (Thin, Thick, Stuffed)
+
+Sauce (Tomato, BBQ, White)
+
+Toppings (Cheese, Pepperoni, Mushrooms, Onions, Pineapple...)
+
+The Problem: If you used a constructor, it would look like a nightmare:
+new Pizza("Thin", "Tomato", true, true, false, true, ...) — this is called the "Telescoping Constructor" anti-pattern. It's impossible to read and easy to mess up the order of arguments.
+
+5. Prototype
+
+While the other patterns focus on how to construct an object from scratch, the Prototype pattern focuses on copying an existing object.
+
+The Use Case: Expensive Initialization
+Imagine a Game Enemy that requires a massive database call to load its 3D textures, sound effects, and AI scripts. If you have 100 of these enemies, calling new Enemy() 100 times might lag the game.
+
+Instead, you load one "master" enemy (the Prototype) and then simply clone it 99 times. Cloning is almost always faster than full instantiation.
+
+
+Structural Patterns:
+
+1. Adapter
+
+Imagine you have a modern app that expects data in JSON format. However, you are forced to use an old legacy library that only provides data in XML. You can't rewrite the legacy library, and you don't want to mess up your modern app code with XML logic.
+
+You build an Adapter—a middleman that takes the XML and "translates" it into JSON so your app remains happy.
+
+2. Bridge
+
+Imagine you have a Shape class with two subclasses: Square and Circle. Now you want to introduce colors: Red and Blue.
+If you use standard inheritance, you end up with 4 classes: RedSquare, BlueSquare, RedCircle, and BlueCircle.
+
+If you add a third shape (Triangle) and a third color (Green), you suddenly have 9 classes. This grows exponentially!
+
+Adapter vs. Bridge?
+Adapter is used to make existing unrelated classes work together (usually after the code is already written).
+
+Bridge is used upfront during design to let the abstraction and implementation vary independently.
+
+3. Composite Pattern
+
+Think of your computer's file system. You have Files and Folders.
+
+A File is a simple unit.
+
+A Folder is a container that can hold Files AND other Folders.
+
+The "magic" of the Composite pattern is that the client doesn't need to check if they are looking at a file or a folder—they can just call getSize() on either one, and it will work.
+
+If your data looks like a Tree, use the Composite pattern. It turns complex "nested" logic into a clean, uniform interface.
+
+4. Decorator
+
+The Concept: "The Onion"
+Instead of using inheritance to add features (which creates a rigid class structure), you use composition. Think of it like wearing clothes:
+
+You start with a Person (the base object).
+
+You wrap them in a Shirt (the first decorator).
+
+You wrap that whole thing in a Jacket (the second decorator).
+
+The "Person" still functions the same, but now they have the added properties of being warm and waterproof.
+
+
+5. Facade
+
+The Problem: "Too Many Moving Parts"
+Imagine you have a complex set of classes for a Game Engine: InputManager, SoundSystem, PhysicsEngine, and Renderer. If the user just wants to "Start Game," they shouldn't have to manually initialize four different systems in the right order.
+
+
+Until now - Quick review:
+
+Adapter: Converts Interface A to Interface B (to fix incompatibility).
+
+Decorator: Adds new features to an object without changing the interface.
+
+Facade: Simplifies multiple interfaces into one easy-to-use interface.
+
+
+6. Flyweight
+
+The Concept: "Intrinsic vs. Extrinsic"
+To understand Flyweight, you have to split an object's data into two buckets:
+
+Intrinsic State: Data that is constant and shared (e.g., the 3D model and texture of a tree).
+
+Extrinsic State: Data that is unique to each instance (e.g., the X and Y coordinates of a specific tree).
+
+7. Proxy
+
+The Concept: "The Personal Assistant"
+Think of a CEO. Most people don't talk to the CEO directly; they talk to the Personal Assistant (Proxy). The assistant:
+
+Filters calls: (Security/Access Control)
+
+Takes notes: (Logging)
+
+Handles requests if the CEO is busy: (Caching)
+
+Only calls the CEO for important matters: (Lazy Initialization)
+
+
+Behavioural Patterns:
+
+1. Observer (Publish-Subscribe model)
+
+The Concept: "The Newsletter"
+Think of a YouTube Channel (the Subject) and its Subscribers (the Observers).
+
+The channel doesn't check every person's house to see if they want a video.
+
+Instead, users "Subscribe" to the channel.
+
+When a new video is uploaded, the channel sends a notification to everyone on the list automatically.
+
+2. Strategy
+
+The Concept: "Swappable Engines"
+Think of a Navigation App. To get from point A to point B, you can go by Car, Walking, or Bicycle.
+The "Route Builder" is the same, but the logic (the strategy) for how it calculates the path changes based on which button you click.
+
+Instead of one giant class with a massive switch statement, you create separate classes for each "Strategy."
+
+
+3. Command
+
+The Concept: "The Restaurant Order"
+Think of a restaurant:
+
+You (the Client) tell the Waiter what you want.
+
+The Waiter writes it on a Ticket (the Command).
+
+The Ticket is a standalone object. It can be put in a queue, moved around, or even cancelled.
+
+The Chef (the Receiver) eventually gets the ticket and cooks the meal.
+
+The Waiter doesn't need to know how to cook; they just need to pass the "Command" object to the person who does.
+
+4. State
+
+The Concept: "The Vending Machine"
+Think of a Vending Machine. Its buttons do different things depending on what "State" it's in:
+
+No Money State: Pressing "Dispense" does nothing.
+
+Has Money State: Pressing "Dispense" gives you a soda.
+
+Out of Stock State: Pressing "Dispense" returns your money.
+
+Instead of a massive if-else or switch block inside the Vending Machine class, we move the logic for each state into its own class.
+
+
+Difference between State and Strategy:
+State - automatically changes the internal details
+Strategy - someone manually does the changing (switching between the strategies)
+
+5. Template
+
+The Concept: "The Recipe"
+Think of a recipe for Making a Beverage. The steps are almost always:
+
+Boil water.
+
+Brew/Steep the ingredient.
+
+Pour into a cup.
+
+Add condiments (sugar, milk, lemon).
+
+The structure is fixed, but a cup of Tea and a cup of Coffee use different ingredients and condiments.
+
+
+Template Method vs. Strategy
+Strategy: Uses Composition. You "plug in" a behavior. The whole algorithm can be swapped at runtime.
+
+Template Method: Uses Inheritance. You "fill in the blanks" of a base class. The structure is fixed at compile time.
+
+6. Mediator
+
+The Problem: "Spaghetti Dependencies"
+Imagine a Chat Room. If every user had a direct connection to every other user, adding a new person would require updating everyone's connection list. In a UI, if a checkbox needs to talk to a button, a text field, and a slider, the code becomes a tangled mess.
+
+
+Mediator vs. Observer
+Observer: The connection is "one-to-many" (one subject, many subscribers). The subject doesn't care who the subscribers are.
+
+Mediator: The connection is "many-to-many." The mediator specifically coordinates the complex dance between specific objects.
+
+7. Memento
+
+The Concept: "The Save Point"
+Think of a video game. When you reach a checkpoint:
+
+The game takes a Snapshot of your health, position, and inventory.
+
+This snapshot is stored in a Memento object.
+
+If you die, the game hands that Memento back to the player object to Restore the state.
+
+
+Memento vs. Command
+Command: Great for undoing actions (e.g., "Add 5 to X" → "Subtract 5 from X").
+
+Memento: Great for undoing state (e.g., "X was 10, now it's 15" → "Set X back to 10"). Use Memento when calculating the "reverse" of an action is too hard.
+
+8. Visitor
+
+The Concept: "The Insurance Auditor"
+Imagine a company with different departments: Sales, Engineering, and HR.
+
+The company structure is stable (you don't add new departments often).
+
+However, different "Visitors" come in to perform operations:
+
+An Auditor wants to check the books.
+
+A Health Inspector wants to check the kitchen.
+
+A Tax Officer wants to calculate payroll tax.
+
+Instead of adding checkBooks(), inspectKitchen(), and calculateTax() methods to every single department class, you create a Visitor that "visits" each department and does the work.
+
+9. Chain of Responsibility
+
+The Concept: "The Customer Support Line"
+Think of a support hotline:
+
+You talk to a Level 1 bot. If it can't solve your problem, it passes you to...
+
+A Level 2 Human Agent. If they can't solve it, they pass you to...
+
+A Manager.
+
+Each person in the "chain" either handles the request or passes it to the next person. The client doesn't care who eventually solves it; they just drop the request into the start of the chain.
+
+Chain of Responsibility vs. Decorator
+They look similar because they both "wrap" calls, but:
+
+Decorator executes its logic and then calls the next one (building on top of it).
+
+Chain of Responsibility usually executes its logic or calls the next one (picking one winner).
+
+10. Interpreter
+
+The Concept: "The Language Translator"
+Imagine you want to build a tool that understands simple commands like 5 + 2 - 3. To a computer, that's just a string. To make sense of it, you break it down into a "Tree" of expressions. Each part of the tree knows how to "Interpret" itself.
+
+11. Iterator
+
+The Concept: "The Universal Remote for Collections"
+Imagine you have a Music Playlist. Sometimes it's a simple list; sometimes it's a complex tree of folders.
+The Iterator is like the "Next" button on your remote. You don't care how the music is stored (on a hard drive, a CD, or streaming); you just want to get the "Next" item until the music stops.
