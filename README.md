@@ -1,0 +1,1 @@
+# All-GoF-Design-Patterns-in-TypeScript
